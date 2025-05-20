@@ -17,12 +17,12 @@ class Parent():
         self.gene_2_dominant = gene_2_dominant
 
         if self.gene_1_dominant == True:
-            self._gene_a = gene_1.upper()
+            self.gene_a = gene_1.upper()
         else:
-            self._gene_a = gene_1.lower()
+            self.gene_a = gene_1.lower()
 
         if self.gene_2_dominant == True:
-            self._gene_b = gene_2.upper()
+            self.gene_b = gene_2.upper()
         else:
-            self._gene_b = gene_2.lower()
+            self.gene_b = gene_2.lower()
 
