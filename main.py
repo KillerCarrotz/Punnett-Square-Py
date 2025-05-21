@@ -8,10 +8,11 @@
 # result. It then prompts user to run a simulation which will give a possible distribution
 # of genes given an amount of ofspring.
 
-#TODO: Add functionality to creatSquare() so that it outputs to a text file.
 #TODO: Add functionality to simulateOffspring so that it generates offspring of a specified amount with random gene distribution.
 #TODO: Call simulateOffspring in a loop so that user can run simulation repeatedly.
 #TODO: In simulateOffspring; Use MatPlotLib to generate a graph of offspring results.
+#TODO: Clean user input so only a 30 char maximum for gene names and y/n for dominance are accepted.
+#TODO: Use loops in main so that new punnett squares can be generated back to back.
 
 from parent_Class import *
 
@@ -22,22 +23,11 @@ def main():
     parent1 = Parent(gene_1_parent_1, gene_1_parent_1_dominant, gene_2_parent_1, gene_2_parent_1_dominant)
     gene_1_parent_2, gene_1_parent_2_dominant, gene_2_parent_2, gene_2_parent_2_dominant = getGenes("2")
     parent2 = Parent(gene_1_parent_2, gene_1_parent_2_dominant, gene_2_parent_2, gene_2_parent_2_dominant)
-
     
-    
-    #Print the parent genes
-    print(parent1.gene_a)
-    print(parent1.gene_b)
-    print(parent1.gene_a_symbol)
-    print(parent1.gene_b_symbol)
-    print(parent2.gene_a)
-    print(parent2.gene_b)
-    print(parent2.gene_a_symbol)
-    print(parent2.gene_b_symbol)
-
+    #createSquare will create the punnett square and write it to punnett_py.txt
     createSquare(parent1, parent2)
 
-def getGenes(number_of_parent):
+def getGenes(number_of_parent):#number_of_parrent is used to acurately prompt the user.
     #Taking user input and saving them to temporary variables.
     gene_1 = input("Enter parent " + number_of_parent + " first gene:")
 
@@ -65,22 +55,31 @@ def getGenes(number_of_parent):
     return gene_1, gene_1_dominant, gene_2, gene_2_dominant
 
 def createSquare(parent1, parent2):
-    #createSquare function takes two parent objects, creates a punnet square using their genes, and prints it to a text file.
-    
-    #Print punnet square to terminal
-    print(" ____________________ ")
-    print("|        Parent 1    |")
-    print("|P        " + parent1.gene_a_symbol + "      " + parent1.gene_b_symbol + "   |")
-    print("|a     ______ ______ |")
-    print("|r  " + parent2.gene_a_symbol + " |  " + parent1.gene_a_symbol + parent2.gene_a_symbol + "  |  " + parent1.gene_b_symbol + parent2.gene_a_symbol +"  ||")
-    print("|e    |______|______||")
-    print("|n  " + parent2.gene_b_symbol + " |  " + parent1.gene_a_symbol + parent2.gene_b_symbol + "  |  " + parent1.gene_b_symbol + parent2.gene_b_symbol +"  ||")
-    print("|t    |______|______||")
-    print("|2                   |")
-    print("|____________________|")
+    #createSquare function takes two parent objects, creates a punnet square using their genes, and prints it to the terminal and writes it to punnett_py.txt.
+    punnet_square_lines = [
+        " ____________________ \n",
+        "|        Parent 1    |\n",
+        "|P        ", parent1.gene_a_symbol, "      ", parent1.gene_b_symbol, "   |\n",
+        "|a     ______ ______ |\n",
+        "|r  ", parent2.gene_a_symbol, " |  ", parent1.gene_a_symbol, parent2.gene_a_symbol, "  |  ", parent1.gene_b_symbol, parent2.gene_a_symbol, "  ||\n",
+        "|e    |______|______||\n",
+        "|n  ", parent2.gene_b_symbol, " |  ", parent1.gene_a_symbol, parent2.gene_b_symbol, "  |  ", parent1.gene_b_symbol, parent2.gene_b_symbol, "  ||\n",
+        "|t    |______|______||\n",
+        "|2                   |\n",
+        "|____________________|\n"
+    ]
 
-    '''todo: print to text file instead of terminal'''
+    #Print punnet square to terminal
+    print(punnet_square_lines)
+
+    #Create and output to a text file.
+    punnett_file_path = "punnett_py.txt"
+    with open(punnett_file_path, 'a') as file:
+        file.writelines(punnet_square_lines)
     
+    #Informs user of file write.
+    print(f"This square has been written to {punnett_file_path} (the file is now closed automatically).") 
+
     return
 
 def simulateOffspring(parent_object_1, parent_object_2, number_of_offspring):
