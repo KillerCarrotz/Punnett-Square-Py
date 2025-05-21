@@ -8,6 +8,11 @@
 # result. It then prompts user to run a simulation which will give a possible distribution
 # of genes given an amount of ofspring.
 
+#TODO: Add functionality to creatSquare() so that it outputs to a text file.
+#TODO: Add functionality to simulateOffspring so that it generates offspring of a specified amount with random gene distribution.
+#TODO: Call simulateOffspring in a loop so that user can run simulation repeatedly.
+#TODO: In simulateOffspring; Use MatPlotLib to generate a graph of offspring results.
+
 from parent_Class import *
 
 def main():
@@ -18,8 +23,7 @@ def main():
     gene_1_parent_2, gene_1_parent_2_dominant, gene_2_parent_2, gene_2_parent_2_dominant = getGenes("2")
     parent2 = Parent(gene_1_parent_2, gene_1_parent_2_dominant, gene_2_parent_2, gene_2_parent_2_dominant)
 
-    #todo: call createPunnetSquare to output a text file with a punnet square.
-    #todo: call simulateOffspring in a loop so that user can run simulation repeatedly.
+    
     
     #Print the parent genes
     print(parent1.gene_a)
@@ -30,6 +34,8 @@ def main():
     print(parent2.gene_b)
     print(parent2.gene_a_symbol)
     print(parent2.gene_b_symbol)
+
+    createSquare(parent1, parent2)
 
 def getGenes(number_of_parent):
     #Taking user input and saving them to temporary variables.
@@ -58,10 +64,22 @@ def getGenes(number_of_parent):
 
     return gene_1, gene_1_dominant, gene_2, gene_2_dominant
 
-def createSquare(parent_object_1, parent_object_2):
-    #createSquare function takes two parent objects and creates a grided punnet square using their genes.
+def createSquare(parent1, parent2):
+    #createSquare function takes two parent objects, creates a punnet square using their genes, and prints it to a text file.
+    
+    #Print punnet square to terminal
+    print(" ____________________ ")
+    print("|        Parent 1    |")
+    print("|P        " + parent1.gene_a_symbol + "      " + parent1.gene_b_symbol + "   |")
+    print("|a     ______ ______ |")
+    print("|r  " + parent2.gene_a_symbol + " |  " + parent1.gene_a_symbol + parent2.gene_a_symbol + "  |  " + parent1.gene_b_symbol + parent2.gene_a_symbol +"  ||")
+    print("|e    |______|______||")
+    print("|n  " + parent2.gene_b_symbol + " |  " + parent1.gene_a_symbol + parent2.gene_b_symbol + "  |  " + parent1.gene_b_symbol + parent2.gene_b_symbol +"  ||")
+    print("|t    |______|______||")
+    print("|2                   |")
+    print("|____________________|")
 
-    #After creating a punnet square, it will be output to a text file.
+    '''todo: print to text file instead of terminal'''
     
     return
 
@@ -69,7 +87,7 @@ def simulateOffspring(parent_object_1, parent_object_2, number_of_offspring):
     #simulateOffspring function takes two parent objects and determines based on the dominance of the genes passed how many offspring will have 
     #different genes.
 
-    #After determining how many offspring are in each category using random from math, it will display a graph using matplotlib.
+    #todo: After determining how many offspring are in each category using random from math, it will display a graph using matplotlib.
     
     return
 
