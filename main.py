@@ -8,10 +8,6 @@
 # result. It then prompts user to run a simulation which will give a possible distribution
 # of genes given an amount of ofspring.
 
-#TODO: In simulateOffspring; Use MatPlotLib to generate a graph of offspring results.
-#TODO: Add functionality to cleanInputInt, cleanInputYN, cleanInputStr. Clean user input so only a 30 char maximum for gene names and y/n for dominance and ints between 1 and 5000 are accepted.
-#TODO: Use loops in main so that new punnett squares can be generated back to back.
-
 import random
 from parent_Class import *
 import matplotlib.pyplot as plt
@@ -23,14 +19,13 @@ def main():
     
     while True:
         runPunnettPy(parent1, parent2)
-        
+
         run_again = cleanInputYN("Run program again? y/n:")
 
         if run_again == "y":
             continue
         else:
             break
-
 
 def runPunnettPy(parent1, parent2):
     run_again_yn = "y"
@@ -59,24 +54,19 @@ def runPunnettPy(parent1, parent2):
 def getGenes(number_of_parent):#number_of_parent is used to acurately prompt the user.
     #Taking user input and saving them to temporary variables.
     gene_1 = str(cleanInputStr("Enter parent " + number_of_parent + " first gene: "))
-    print(gene_1)
 
     #todo: create a loop for gene_1_is_dominant and gene_2_is_dominant so that only y or n are accepted outputs.
     gene_1_is_dominant = str(cleanInputYN("Is this trait dominant? y/n "))
-    print(gene_1_is_dominant)
 
     gene_2 = str(cleanInputStr("Enter parent " + number_of_parent + " second gene: "))
-    print(gene_2)
 
     gene_2_is_dominant = str(cleanInputYN("Is this trait dominant? y/n "))
-    print(gene_2_is_dominant)
 
     #Creating a boolean value for whether a gene is dominant.
     if gene_1_is_dominant == "n":
         gene_1_dominant = False
     else:
         gene_1_dominant = True
-
 
     if gene_2_is_dominant == "n":
         gene_2_dominant = False
@@ -196,30 +186,30 @@ def simulateOffspring(parent_object_1, parent_object_2):
     return
 
 def cleanInputInt(promt_string):
-    #Called on a user input Int value to clean it for only int values. Returns with boolean value, True if clean, False if new input is needed.
+    #Called insstead of input. Returns int from user input.
     clean_input = None
 
     while True:
-        dirty_input = input(f"{promt_string}") 
+        dirty_input = input(f"{promt_string}") #Get user input
         try:
             clean_input = int(dirty_input)
 
             if clean_input <= 0:
                 print("input must be greater than 0")
-                continue
+                continue #Exit try and run loop again if improper input.
             
             if clean_input > 10000:
                 print("input cannot be greater than 10,000")
-                continue
+                continue #Exit try and run loop again if improper input.
 
 
-            return(clean_input)
+            return(clean_input) #When both ifs are passed, return clean_input and exit function
             
-        except ValueError:
+        except ValueError: #If user input cannot be assigned as an int, run loop again.
             print("answer must be an integer less than 10,000")
 
 def cleanInputYN(promt_string):
-    #Called on a user input String value to clean it for only "y" or "n" values. Returns with boolean value, True if clean, False if new input is needed.
+    #Called instead of input. Returns "y" or "n" from user input.
     clean_input = None
 
     while True:
@@ -227,7 +217,6 @@ def cleanInputYN(promt_string):
 
         if dirty_input == "y" or dirty_input == "n":
             clean_input = dirty_input
-            print(clean_input)
             return(clean_input)
 
         else:
@@ -235,13 +224,11 @@ def cleanInputYN(promt_string):
             continue
 
 def cleanInputStr(prompt_string):
-    #Called on a user input Str value to clean it for only str values. Returns with boolean value, True if clean, False if new input is needed.
+    #Called instead of input. returns a lowercase string from user input.
     
     clean_input = input(f"{prompt_string}")
 
     clean_input = clean_input.lower()
-
-    print(clean_input)
 
     return(clean_input)
 
