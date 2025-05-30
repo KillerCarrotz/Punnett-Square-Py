@@ -14,44 +14,62 @@
 
 import random
 from parent_Class import *
+import matplotlib.pyplot as plt
 
 def main():
     #Default parent1 and parent2 used for testing
     parent1 = Parent("A", True, "b", False)
     parent2 = Parent("A", True, "b", False)
-    continue_yn = "y"
-
-    #Create two parent objects with the genes assigned from the get genes funtion.
-    gene_1_parent_1, gene_1_parent_1_dominant, gene_2_parent_1, gene_2_parent_1_dominant = getGenes("1")
-    parent1 = Parent(gene_1_parent_1, gene_1_parent_1_dominant, gene_2_parent_1, gene_2_parent_1_dominant)
-    gene_1_parent_2, gene_1_parent_2_dominant, gene_2_parent_2, gene_2_parent_2_dominant = getGenes("2")
-    parent2 = Parent(gene_1_parent_2, gene_1_parent_2_dominant, gene_2_parent_2, gene_2_parent_2_dominant)
     
-    #createSquare will create the punnett square and write it to punnett_py.txt
-    createSquare(parent1, parent2)
+    while True:
+        runPunnettPy(parent1, parent2)
+        
+        run_again = cleanInputYN("Run program again? y/n:")
+
+        if run_again == "y":
+            continue
+        else:
+            break
+
+
+def runPunnettPy(parent1, parent2):
+    run_again_yn = "y"
+
+    while run_again_yn == "y":
+        #Create two parent objects with the genes assigned from the get genes funtion.
+        gene_1_parent_1, gene_1_parent_1_dominant, gene_2_parent_1, gene_2_parent_1_dominant = getGenes("1")
+        parent1 = Parent(gene_1_parent_1, gene_1_parent_1_dominant, gene_2_parent_1, gene_2_parent_1_dominant)
+        gene_1_parent_2, gene_1_parent_2_dominant, gene_2_parent_2, gene_2_parent_2_dominant = getGenes("2")
+        parent2 = Parent(gene_1_parent_2, gene_1_parent_2_dominant, gene_2_parent_2, gene_2_parent_2_dominant)
+
+        #createSquare will create the punnett square and write it to punnett_py.txt
+        createSquare(parent1, parent2)
+
+        #Start over if user wants to create different parents
+        run_again_yn = cleanInputYN("Would you like to use different parents for the simulation? y/n :")
+
+    run_again_yn = "y"
     
     #Run simulation until user chooses to exit.
-    while continue_yn == "y":
+    while run_again_yn == "y":
         #simulateOffspring will randomly determine each offspring's genes and display a total amount of offspring with each gene combo.
         simulateOffspring(parent1, parent2)
-        continue_yn = input("Would you like to simulate again? y/n :")
+        run_again_yn = cleanInputYN("Would you like to simulate again? y/n :")
 
-    else:
-        return
-
-
-def getGenes(number_of_parent):#number_of_parrent is used to acurately prompt the user.
+def getGenes(number_of_parent):#number_of_parent is used to acurately prompt the user.
     #Taking user input and saving them to temporary variables.
-    gene_1 = input("Enter parent " + number_of_parent + " first gene: ")
+    gene_1 = str(cleanInputStr("Enter parent " + number_of_parent + " first gene: "))
+    print(gene_1)
 
     #todo: create a loop for gene_1_is_dominant and gene_2_is_dominant so that only y or n are accepted outputs.
-    gene_1_is_dominant = input("Is this trait dominant? y/n ")
-    gene_1_is_dominant = gene_1_is_dominant.lower()
+    gene_1_is_dominant = str(cleanInputYN("Is this trait dominant? y/n "))
+    print(gene_1_is_dominant)
 
-    gene_2 = input("Enter parent " + number_of_parent + " second gene: ")
+    gene_2 = str(cleanInputStr("Enter parent " + number_of_parent + " second gene: "))
+    print(gene_2)
 
-    gene_2_is_dominant = input("Is this trait dominant? y/n ")
-    gene_2_is_dominant = gene_2_is_dominant.lower()
+    gene_2_is_dominant = str(cleanInputYN("Is this trait dominant? y/n "))
+    print(gene_2_is_dominant)
 
     #Creating a boolean value for whether a gene is dominant.
     if gene_1_is_dominant == "n":
@@ -94,7 +112,7 @@ def createSquare(parent1, parent2):
     #Informs user of file write.
     print(f"This square has been written to {punnett_file_path} (the file is now closed automatically).") 
 
-    return
+    return None
 
 def simulateOffspring(parent_object_1, parent_object_2):
     #simulateOffspring function takes two parent objects and determines based on the dominance of the genes passed how many offspring will have 
@@ -103,13 +121,18 @@ def simulateOffspring(parent_object_1, parent_object_2):
     #todo: After determining how many offspring are in each category using random from math, it will display a graph using matplotlib.
 
     #Get user input for how many offspring will be generated
-    number_of_offspring = input("How many offspring would you like to simulate? (1-5,000)")
+    number_of_offspring = cleanInputInt("How many offspring would you like to simulate? (1-5,000) ")
     number_of_offspring = int(number_of_offspring)
 
     #instanciate variables for gene total calculations.
+    gene_names = [parent_object_1.gene_a_symbol + parent_object_2.gene_a_symbol, parent_object_1.gene_a_symbol + parent_object_2.gene_b_symbol, parent_object_1.gene_b_symbol + parent_object_2.gene_a_symbol, parent_object_1.gene_b_symbol + parent_object_2.gene_b_symbol]
     gene_list = [0, 0, 0, 0]
     number_dominant_expressed = 0
     number_recessive_expressed = 0
+
+    bar_colors = ['blue', 'blue', 'blue', 'blue']
+
+
 
     #For each offspring we want to determine which of 4 gene combos they have, and if dominant or recessive genes are expressed.
     for offspring in range(number_of_offspring):
@@ -122,24 +145,29 @@ def simulateOffspring(parent_object_1, parent_object_2):
         if random_gene == 0:
             if parent_object_1.gene_1_dominant == False and parent_object_2.gene_1_dominant == False:
                 number_recessive_expressed+=1
+                bar_colors[0] = 'green'
+
             else:
                 number_dominant_expressed+=1
 
         elif random_gene == 1:
             if parent_object_1.gene_1_dominant == False and parent_object_2.gene_2_dominant == False:
                 number_recessive_expressed+=1
+                bar_colors[1] = 'green'
             else:
                 number_dominant_expressed+=1
 
         elif random_gene == 2:
             if parent_object_1.gene_2_dominant == False and parent_object_2.gene_1_dominant == False:
                 number_recessive_expressed+=1
+                bar_colors[2] = 'green'
             else:
                 number_dominant_expressed+=1
         
         elif random_gene ==3:
             if parent_object_1.gene_2_dominant == False and parent_object_2.gene_2_dominant == False:
                 number_recessive_expressed+=1
+                bar_colors[3] = 'green'
             else:
                 number_dominant_expressed+=1
 
@@ -153,22 +181,69 @@ def simulateOffspring(parent_object_1, parent_object_2):
         print(f"{parent_object_1.gene_b_symbol}{parent_object_2.gene_b_symbol}: {gene_list[3]}")
         print(f"Total dominant genes expressed: {number_dominant_expressed}\nTotal recessive genes expressed: {number_recessive_expressed}")
 
+        # Generate bar graph for each offspring result.
+        plt.bar(gene_names, gene_list, color=bar_colors)
+
+        plt.xlabel('Genes Passed')
+        plt.ylabel('amount of offspring')
+        plt.title('Offspring results graph')
+
+        plt.savefig('offspringBarGraph.png', dpi=300)
+
+        plt.show()
+
+
     return
 
-def cleanInputInt():
+def cleanInputInt(promt_string):
     #Called on a user input Int value to clean it for only int values. Returns with boolean value, True if clean, False if new input is needed.
+    clean_input = None
 
-    return
+    while True:
+        dirty_input = input(f"{promt_string}") 
+        try:
+            clean_input = int(dirty_input)
 
-def cleanInputYN():
+            if clean_input <= 0:
+                print("input must be greater than 0")
+                continue
+            
+            if clean_input > 10000:
+                print("input cannot be greater than 10,000")
+                continue
+
+
+            return(clean_input)
+            
+        except ValueError:
+            print("answer must be an integer less than 10,000")
+
+def cleanInputYN(promt_string):
     #Called on a user input String value to clean it for only "y" or "n" values. Returns with boolean value, True if clean, False if new input is needed.
+    clean_input = None
 
-    return
+    while True:
+        dirty_input = input(f"{promt_string}") 
 
-def cleanInputStr():
+        if dirty_input == "y" or dirty_input == "n":
+            clean_input = dirty_input
+            print(clean_input)
+            return(clean_input)
+
+        else:
+            print("input must be either y or n")
+            continue
+
+def cleanInputStr(prompt_string):
     #Called on a user input Str value to clean it for only str values. Returns with boolean value, True if clean, False if new input is needed.
+    
+    clean_input = input(f"{prompt_string}")
 
-    return
+    clean_input = clean_input.lower()
+
+    print(clean_input)
+
+    return(clean_input)
 
 if __name__ == "__main__":
     main()

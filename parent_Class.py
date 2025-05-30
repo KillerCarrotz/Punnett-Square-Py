@@ -9,7 +9,7 @@
 
 class Parent():
 
-    def __init__(self,gene_1, gene_1_dominant, gene_2, gene_2_dominant):
+    def __init__(self,gene_1: str, gene_1_dominant, gene_2:str, gene_2_dominant):
 
         #Assign passed values to object variables.
         self.gene_a = gene_1
